@@ -16,20 +16,25 @@ public class TranslationServiceImpl implements TranslationService {
 	private TranslationJpaRepository translationRepository;
 
 	@Override
-	public int saveTranslation(Translation translation) {
-		boolean saveTranslation = false;
-		if(!textRepository.existsById(translation.getOrigin().getId())) {
-			textRepository.save(translation.getOrigin());
-			saveTranslation = true;
+	public Translation save(Translation translation) {
+		var results = textRepository.findByLocaleAndText(translation.getOrigin().getLocale(), translation.getOrigin().getText());
+		if(results.isEmpty()) {			
+			translation.setOrigin(textRepository.save(translation.getOrigin()));
+		} else {
+			translation.setOrigin(results.get(0));
 		}
-		if(!textRepository.existsById(translation.getTranslation().getId())) {
-			textRepository.save(translation.getTranslation());
-			saveTranslation = true;
+		
+		results = textRepository.findByLocaleAndText(translation.getTranslation().getLocale(), translation.getTranslation().getText());
+		if(results.isEmpty()) {			
+			translation.setTranslation(textRepository.save(translation.getTranslation()));
+		} else {
+			translation.setTranslation(results.get(0));
 		}
-		if(saveTranslation && !translationRepository.existsById(new TranslationId(translation.getOrigin(), translation.getTranslation()))) {
-			translationRepository.save(translation);
+		if(!translationRepository.existsById(new TranslationId(translation.getOrigin(), translation.getTranslation()))
+			&& !translationRepository.existsById(new TranslationId(translation.getTranslation(), translation.getOrigin()))) {
+			return translationRepository.save(translation);
 		}
-		return 0;
+		return translation;
 	}
 
 }

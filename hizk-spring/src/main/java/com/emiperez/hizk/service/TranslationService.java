@@ -4,6 +4,6 @@ import com.emiperez.hizk.model.Translation;
 
 public interface TranslationService {
 	
-	int saveTranslation(Translation translation);
+	Translation save(Translation translation);
 
 }

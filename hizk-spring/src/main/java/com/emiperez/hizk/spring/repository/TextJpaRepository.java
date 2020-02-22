@@ -1,10 +1,16 @@
 package com.emiperez.hizk.spring.repository;
 
+import java.util.List;
+import java.util.Locale;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.emiperez.hizk.model.Text;
-import com.emiperez.hizk.model.TextId;
 
-public interface TextJpaRepository extends JpaRepository<Text, TextId> {
+@Repository
+public interface TextJpaRepository extends JpaRepository<Text, Integer> {
+	
+	List<Text> findByLocaleAndText(Locale locale, String text);
 
 }

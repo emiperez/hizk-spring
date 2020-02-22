@@ -5,37 +5,47 @@ import java.util.Locale;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.validation.constraints.Size;
 
 @Entity
-@IdClass(TextId.class)
 public class Text implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
+	@GeneratedValue
+	Integer id;
+
 	@Column(length = 5)
 	private Locale locale;
 	
-	@Id
 	@Column(length = 50)
 	@Size(min = 1, max = 50)
 	private String text;
 	
-	public Text setLocale(Locale locale) {
+	public Text() {}
+	
+	public Text(Locale locale, String text) {
 		this.locale = locale;
-		return this;
+		this.text = text;
 	}
 
-	public Text setText(String text) {
-		this.text = text;
-		return this;
+	public void setId(Integer id) {
+		this.id = id;
 	}
+
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}	
 	
-	public TextId getId() {
-		return new TextId(locale, text);
+	public Integer getId() {
+		return id;
 	}
 	
 	public Locale getLocale() {

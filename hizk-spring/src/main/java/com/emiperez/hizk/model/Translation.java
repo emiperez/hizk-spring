@@ -45,5 +45,13 @@ public class Translation implements Serializable{
 	public Text getTranslation() {
 		return translation;
 	}
+	
+	public void setOrigin(Text origin) {
+		this.origin = origin;
+	}
+	
+	public void setTranslation(Text translation) {
+		this.translation = translation;
+	}
 
 }

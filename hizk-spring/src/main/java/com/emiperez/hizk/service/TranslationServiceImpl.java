@@ -3,7 +3,6 @@ package com.emiperez.hizk.service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.emiperez.hizk.model.Translation;
-import com.emiperez.hizk.model.TranslationId;
 import com.emiperez.hizk.spring.repository.TextJpaRepository;
 import com.emiperez.hizk.spring.repository.TranslationJpaRepository;
 
@@ -30,8 +29,8 @@ public class TranslationServiceImpl implements TranslationService {
 		} else {
 			translation.setTranslation(results.get(0));
 		}
-		if(!translationRepository.existsById(new TranslationId(translation.getOrigin(), translation.getTranslation()))
-			&& !translationRepository.existsById(new TranslationId(translation.getTranslation(), translation.getOrigin()))) {
+		if(!translationRepository.existsById(translation.getId())
+			&& !translationRepository.existsById(translation.getId().getReverseTranslationId())) {
 			return translationRepository.save(translation);
 		}
 		return translation;

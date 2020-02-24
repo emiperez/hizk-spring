@@ -33,7 +33,9 @@ public class Translation implements Serializable{
 	@Column(length = 2)
 	private Level level;
 	
-	public Translation() {}
+	public Translation() {
+		id = new TranslationId(null, null);
+	}
 	
 	public Translation(Text origin, Text translation, Level level) {
 		this.origin = origin;
@@ -55,6 +57,10 @@ public class Translation implements Serializable{
 		return translation;
 	}
 	
+	public Level getLevel() {
+		return level;
+	}
+	
 	public void setOrigin(Text origin) {
 		this.origin = origin;
 		this.id.setOrigin(origin.getId());
@@ -65,4 +71,7 @@ public class Translation implements Serializable{
 		this.id.setTranslation(translation.getId());
 	}
 
+	public void setLevel(Level level) {
+		this.level = level;
+	}
 }

@@ -44,6 +44,13 @@ public class Translation implements Serializable{
 		this.id = new TranslationId(origin.getId(), translation.getId());
 	}
 	
+	public Translation(Text origin, Text translation, String level) {
+		this.origin = origin;
+		this.translation = translation;
+		this.level = Level.valueOf(level);
+		this.id = new TranslationId(origin.getId(), translation.getId());
+	}
+	
 	public TranslationId getId() {
 		return id;
 	}	

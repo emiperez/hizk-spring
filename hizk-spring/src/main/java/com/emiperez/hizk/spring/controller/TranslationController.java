@@ -42,12 +42,12 @@ public class TranslationController {
 		return t;
 	}
 		
-	@PostMapping("/translation/new")
+	@PostMapping("/translation")
 	Translation newTranslation(@RequestBody Translation translation) {
 		return translationService.save(translation);
 	}
 	
-	@DeleteMapping("/translation/delete/{originId}/{translationId}")
+	@DeleteMapping("/translation/{originId}/{translationId}")
 	ResponseEntity<Void> deleteTranslation(@PathVariable Integer originId, @PathVariable Integer translationId) {
 		translationService.delete(new TranslationId(originId, translationId));
 		return new ResponseEntity<>(HttpStatus.OK);

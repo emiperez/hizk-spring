@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -21,11 +21,11 @@ public class Translation implements Serializable{
 	@JsonIgnore
 	private TranslationId id;
 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "origin_id", insertable = false, updatable = false)
 	private Text origin;
 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "translation_id", insertable = false, updatable = false)
 	private Text translation;
 	

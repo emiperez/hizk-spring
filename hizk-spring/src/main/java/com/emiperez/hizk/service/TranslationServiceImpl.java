@@ -6,13 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emiperez.hizk.model.Translation;
 import com.emiperez.hizk.model.TranslationId;
-import com.emiperez.hizk.spring.repository.TextJpaRepository;
+import com.emiperez.hizk.spring.repository.TermJpaRepository;
 import com.emiperez.hizk.spring.repository.TranslationJpaRepository;
 
 public class TranslationServiceImpl implements TranslationService {
 	
 	@Autowired
-	private TextJpaRepository textRepository;
+	private TermJpaRepository textRepository;
 	
 	@Autowired
 	private TranslationJpaRepository translationRepository;

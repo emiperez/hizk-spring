@@ -22,12 +22,9 @@ public class Question implements Serializable {
 	private Exam exam;
 	
 	@OneToOne
-	@JoinColumn(name="question_text_id")
-	private Text question;
-	
-	@OneToOne
-	@JoinColumn(name="answer_text_id")
-	private Text answer;
+	@JoinColumn(name="question_term_id", referencedColumnName = "origin_id")
+	@JoinColumn(name="answer_term_id", referencedColumnName = "meaning_id")
+	private Translation terms;
 	
 	public Question() {}
 
@@ -47,24 +44,12 @@ public class Question implements Serializable {
 		this.exam = exam;
 	}
 
-	public Text getQuestion() {
-		return question;
+	public Translation getTerms() {
+		return terms;
 	}
 
-	public void setQuestion(Text question) {
-		this.question = question;
-	}
-
-	public Text getAnswer() {
-		return answer;
-	}
-
-	public void setAnswer(Text answer) {
-		this.answer = answer;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public void setTerms(Translation terms) {
+		this.terms = terms;
 	}
 	
 }

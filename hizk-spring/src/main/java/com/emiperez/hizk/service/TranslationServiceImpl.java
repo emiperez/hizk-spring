@@ -27,11 +27,11 @@ public class TranslationServiceImpl implements TranslationService {
 			translation.setOrigin(results.get(0));
 		}
 		
-		results = textRepository.findByLocaleAndText(translation.getTranslation().getLocale(), translation.getTranslation().getText());
+		results = textRepository.findByLocaleAndText(translation.getMeaning().getLocale(), translation.getMeaning().getText());
 		if(results.isEmpty()) {			
-			translation.setTranslation(textRepository.save(translation.getTranslation()));
+			translation.setMeaning(textRepository.save(translation.getMeaning()));
 		} else {
-			translation.setTranslation(results.get(0));
+			translation.setMeaning(results.get(0));
 		}
 		if(!translationRepository.existsById(translation.getId())
 			&& !translationRepository.existsById(translation.getId().getReverseTranslationId())) {

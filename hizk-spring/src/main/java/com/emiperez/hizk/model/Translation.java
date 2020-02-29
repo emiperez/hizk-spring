@@ -23,11 +23,11 @@ public class Translation implements Serializable{
 
 	@ManyToOne
 	@JoinColumn(name = "origin_id", insertable = false, updatable = false)
-	private Text origin;
+	private Term origin;
 
 	@ManyToOne
-	@JoinColumn(name = "translation_id", insertable = false, updatable = false)
-	private Text translation;
+	@JoinColumn(name = "meaning_id", insertable = false, updatable = false)
+	private Term meaning;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(length = 2)
@@ -37,16 +37,16 @@ public class Translation implements Serializable{
 		id = new TranslationId(null, null);
 	}
 	
-	public Translation(Text origin, Text translation, Level level) {
+	public Translation(Term origin, Term meaning, Level level) {
 		this.origin = origin;
-		this.translation = translation;
+		this.meaning = meaning;
 		this.level = level;
-		this.id = new TranslationId(origin.getId(), translation.getId());
+		this.id = new TranslationId(origin.getId(), meaning.getId());
 	}
 	
-	public Translation(Text origin, Text translation, String level) {
+	public Translation(Term origin, Term translation, String level) {
 		this.origin = origin;
-		this.translation = translation;
+		this.meaning = translation;
 		this.level = Level.valueOf(level);
 		this.id = new TranslationId(origin.getId(), translation.getId());
 	}
@@ -56,26 +56,26 @@ public class Translation implements Serializable{
 	}	
 
 	
-	public Text getOrigin() {
+	public Term getOrigin() {
 		return origin;
 	}
 
-	public Text getTranslation() {
-		return translation;
+	public Term getMeaning() {
+		return meaning;
 	}
 	
 	public Level getLevel() {
 		return level;
 	}
 	
-	public void setOrigin(Text origin) {
+	public void setOrigin(Term origin) {
 		this.origin = origin;
-		this.id.setOrigin(origin.getId());
+		this.id.setOriginId(origin.getId());
 	}
 	
-	public void setTranslation(Text translation) {
-		this.translation = translation;
-		this.id.setTranslation(translation.getId());
+	public void setMeaning(Term meaning) {
+		this.meaning = meaning;
+		this.id.setMeaningId(meaning.getId());
 	}
 
 	public void setLevel(Level level) {

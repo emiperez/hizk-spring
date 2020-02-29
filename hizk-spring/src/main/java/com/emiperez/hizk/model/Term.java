@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.Size;
 
 @Entity
-public class Text implements Serializable {
+public class Term implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -25,9 +25,9 @@ public class Text implements Serializable {
 	@Size(min = 1, max = 50)
 	private String text;
 	
-	public Text() {}
+	public Term() {}
 	
-	public Text(Locale locale, String text) {
+	public Term(Locale locale, String text) {
 		this.locale = locale;
 		this.text = text;
 	}

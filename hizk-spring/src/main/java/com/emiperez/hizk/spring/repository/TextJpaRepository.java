@@ -6,11 +6,11 @@ import java.util.Locale;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.emiperez.hizk.model.Text;
+import com.emiperez.hizk.model.Term;
 
 @Repository
-public interface TextJpaRepository extends JpaRepository<Text, Integer> {
+public interface TextJpaRepository extends JpaRepository<Term, Integer> {
 	
-	List<Text> findByLocaleAndText(Locale locale, String text);
+	List<Term> findByLocaleAndText(Locale locale, String text);
 
 }

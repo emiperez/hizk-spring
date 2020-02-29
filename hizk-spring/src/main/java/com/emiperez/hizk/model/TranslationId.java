@@ -11,43 +11,43 @@ public class TranslationId implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Column(name = "origin_id")
-	private Integer origin;
+	private Integer originId;
 	
-	@Column(name = "translation_id")
-	private Integer translation;
+	@Column(name = "meaning_id")
+	private Integer meaningId;
 
 	public TranslationId() {}
 
-	public TranslationId(Integer originId, Integer translationId) {
-		this.origin = originId;
-		this.translation = translationId;
+	public TranslationId(Integer originId, Integer meaningId) {
+		this.originId = originId;
+		this.meaningId = meaningId;
 	}
-	public Integer getOrigin() {
-		return origin;
-	}
-
-	public void setOrigin(Integer origin) {
-		this.origin = origin;
+	public Integer getOriginId() {
+		return originId;
 	}
 
-	public Integer getTranslation() {
-		return translation;
+	public void setOriginId(Integer origin) {
+		this.originId = origin;
 	}
 
-	public void setTranslation(Integer translation) {
-		this.translation = translation;
+	public Integer getMeaningId() {
+		return meaningId;
+	}
+
+	public void setMeaningId(Integer meaningId) {
+		this.meaningId = meaningId;
 	}
 	
 	public TranslationId getReverseTranslationId() {
-		return new TranslationId(translation, origin);
+		return new TranslationId(meaningId, originId);
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((origin == null) ? 0 : origin.hashCode());
-		result = prime * result + ((translation == null) ? 0 : translation.hashCode());
+		result = prime * result + ((originId == null) ? 0 : originId.hashCode());
+		result = prime * result + ((meaningId == null) ? 0 : meaningId.hashCode());
 		return result;
 	}
 
@@ -60,15 +60,15 @@ public class TranslationId implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		TranslationId other = (TranslationId) obj;
-		if (origin == null) {
-			if (other.origin != null)
+		if (originId == null) {
+			if (other.originId != null)
 				return false;
-		} else if (!origin.equals(other.origin))
+		} else if (!originId.equals(other.originId))
 			return false;
-		if (translation == null) {
-			if (other.translation != null)
+		if (meaningId == null) {
+			if (other.meaningId != null)
 				return false;
-		} else if (!translation.equals(other.translation))
+		} else if (!meaningId.equals(other.meaningId))
 			return false;
 		return true;
 	}

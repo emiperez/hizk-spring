@@ -54,7 +54,6 @@ public class Translation implements Serializable{
 	public TranslationId getId() {
 		return id;
 	}	
-
 	
 	public Term getOrigin() {
 		return origin;

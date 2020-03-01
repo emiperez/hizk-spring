@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 import lombok.NonNull;
 
@@ -41,8 +42,10 @@ public class Exam implements Serializable {
 	@Column
 	private int numberOfQuestions = 10;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Question> questions = new ArrayList<>();
+	@ManyToMany
+	@JoinTable(name = "exam_questions",	inverseJoinColumns = @JoinColumn(name = "term_id"))
+	@JoinColumn(name = "exam_id")	
+	private List<Term> questions = new ArrayList<>();
 
 	public Exam() {
 	}
@@ -95,15 +98,75 @@ public class Exam implements Serializable {
 		this.numberOfQuestions = numberOfQuestions;
 	}
 
-	public List<Question> getQuestions() {
+	public List<Term> getQuestions() {
 		return questions;
 	}
 
-	public void setQuestions(List<Question> questions) {
-		this.questions = questions;
+	public void setQuestions(List<Term> questions) {
+		this.questions.clear();
+	    if (questions != null) {
+	        this.questions.addAll(questions);
+	    }
 	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}	
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((answerLocale == null) ? 0 : answerLocale.hashCode());
+		result = prime * result + (caseSensitive ? 1231 : 1237);
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + numberOfQuestions;
+		result = prime * result + ((questionLocale == null) ? 0 : questionLocale.hashCode());
+		result = prime * result + ((questions == null) ? 0 : questions.hashCode());
+		result = prime * result + ((when == null) ? 0 : when.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Exam other = (Exam) obj;
+		if (answerLocale == null) {
+			if (other.answerLocale != null)
+				return false;
+		} else if (!answerLocale.equals(other.answerLocale))
+			return false;
+		if (caseSensitive != other.caseSensitive)
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (numberOfQuestions != other.numberOfQuestions)
+			return false;
+		if (questionLocale == null) {
+			if (other.questionLocale != null)
+				return false;
+		} else if (!questionLocale.equals(other.questionLocale))
+			return false;
+		if (questions == null) {
+			if (other.questions != null)
+				return false;
+		} else if (!questions.equals(other.questions))
+			return false;
+		if (when == null) {
+			if (other.when != null)
+				return false;
+		} else if (!when.equals(other.when))
+			return false;
+		return true;
+	}
+	
+	
 }

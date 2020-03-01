@@ -44,7 +44,7 @@ public class TranslationController {
 		return levels;
 	}
 		
-	@PostMapping()
+	@PostMapping
 	Translation newTranslation(@RequestBody Translation translation) {
 		return translationService.save(translation);
 	}

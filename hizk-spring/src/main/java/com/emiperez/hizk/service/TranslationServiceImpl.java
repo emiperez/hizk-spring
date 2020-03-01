@@ -12,7 +12,7 @@ import com.emiperez.hizk.spring.repository.TranslationJpaRepository;
 public class TranslationServiceImpl implements TranslationService {
 	
 	@Autowired
-	private TermJpaRepository textRepository;
+	private TermJpaRepository termRepository;
 	
 	@Autowired
 	private TranslationJpaRepository translationRepository;
@@ -20,16 +20,16 @@ public class TranslationServiceImpl implements TranslationService {
 	@Override
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public Translation save(Translation translation) {
-		var results = textRepository.findByLocaleAndText(translation.getOrigin().getLocale(), translation.getOrigin().getText());
+		var results = termRepository.findByLocaleAndText(translation.getOrigin().getLocale(), translation.getOrigin().getText());
 		if(results.isEmpty()) {			
-			translation.setOrigin(textRepository.save(translation.getOrigin()));
+			translation.setOrigin(termRepository.save(translation.getOrigin()));
 		} else {
 			translation.setOrigin(results.get(0));
 		}
 		
-		results = textRepository.findByLocaleAndText(translation.getMeaning().getLocale(), translation.getMeaning().getText());
+		results = termRepository.findByLocaleAndText(translation.getMeaning().getLocale(), translation.getMeaning().getText());
 		if(results.isEmpty()) {			
-			translation.setMeaning(textRepository.save(translation.getMeaning()));
+			translation.setMeaning(termRepository.save(translation.getMeaning()));
 		} else {
 			translation.setMeaning(results.get(0));
 		}

@@ -1,6 +1,9 @@
 package com.emiperez.hizk.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +20,11 @@ public class TranslationServiceImpl implements TranslationService {
 	@Autowired
 	private TranslationJpaRepository translationRepository;
 
+	@Override
+	public List<Translation> listLatest() {
+		return translationRepository.findByOrderByOriginIdDesc(PageRequest.of(0, 5));
+	}
+	
 	@Override
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public Translation save(Translation translation) {

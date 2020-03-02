@@ -21,24 +21,24 @@ import com.emiperez.hizk.spring.repository.TermJpaRepository;
 public class TermController {
 	
 	@Autowired
-	TermJpaRepository textRepository;
+	TermJpaRepository termRepository;
 	
 	@GetMapping("/locales")
 	public ResponseEntity<List<Locale>> listLocales() {
-		var locales = textRepository.findDistinctLocales();
+		var locales = termRepository.findDistinctLocales();
 		if (locales.isEmpty()) {
 			return new ResponseEntity<List<Locale>>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<List<Locale>>(locales, HttpStatus.OK);
 	}
 	
-	@PutMapping("/{termId}")
+	@PutMapping
 	public ResponseEntity<Term> editText(@RequestBody Term term) {
-		Optional<Term> current = textRepository.findById(term.getId());
+		Optional<Term> current = termRepository.findById(term.getId());
 		if(current.isEmpty()) {
-			return new ResponseEntity<Term>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Term>(HttpStatus.CONFLICT);
 		}
-		textRepository.save(term);
+		term = termRepository.save(term);
 		return new ResponseEntity<Term>(term, HttpStatus.OK);
 	}
 	

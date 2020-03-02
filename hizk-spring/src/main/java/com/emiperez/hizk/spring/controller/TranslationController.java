@@ -1,12 +1,8 @@
 package com.emiperez.hizk.spring.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,13 +26,9 @@ public class TranslationController {
 	@Autowired
 	TranslationService translationService;
 	
-	@GetMapping("/")
-	public RepresentationModel<?> root() {
-		RepresentationModel<?> rootResource = new RepresentationModel<>();
-		rootResource.add(
-				linkTo(methodOn(TranslationController.class).root()).withSelfRel(),
-				linkTo(methodOn(TranslationController.class).listAllLevels()).withRel("levels"));
-		return rootResource;
+	@GetMapping
+	public List<Translation> latestTranslations() {
+		return translationService.listLatest();
 	}
 	
 	@GetMapping("/levels")

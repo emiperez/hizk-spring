@@ -13,7 +13,7 @@ import com.emiperez.hizk.model.Term;
 @Repository
 public interface TermJpaRepository extends JpaRepository<Term, Integer> {
 	
-	List<Term> findByLocaleAndText(Locale locale, String text);
+	Term getOneByLocaleAndText(Locale locale, String text);
 	
 	@Query("SELECT DISTINCT t.locale FROM Term t")
 	List<Locale> findDistinctLocales();

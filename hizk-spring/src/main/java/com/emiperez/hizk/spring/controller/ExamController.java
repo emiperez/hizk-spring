@@ -1,12 +1,17 @@
 package com.emiperez.hizk.spring.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.emiperez.hizk.model.Exam;
+import com.emiperez.hizk.model.Term;
 import com.emiperez.hizk.service.ExamService;
 
 @RestController
@@ -21,4 +26,13 @@ public class ExamController {
 		Exam output =  examService.startExam(exam);
 		return output;
 	}
+	
+	@GetMapping("/{examId}/{questionId}/{answerText}")
+	ResponseEntity<Term> checkAnswer(@PathVariable Integer examId, @PathVariable Integer questionId, @PathVariable String answerText) {
+		if (examService.checkAnswer(examId, questionId, answerText)) {
+			return new ResponseEntity<Term>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<Term>(HttpStatus.NOT_FOUND);
+	}
 }
+

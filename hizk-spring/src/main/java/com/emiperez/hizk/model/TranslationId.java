@@ -22,6 +22,7 @@ public class TranslationId implements Serializable{
 		this.originId = originId;
 		this.meaningId = meaningId;
 	}
+	
 	public Integer getOriginId() {
 		return originId;
 	}
@@ -72,7 +73,5 @@ public class TranslationId implements Serializable{
 			return false;
 		return true;
 	}
-
-
 	
 }

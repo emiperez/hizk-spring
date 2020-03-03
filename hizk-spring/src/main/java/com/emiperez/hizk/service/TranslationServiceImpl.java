@@ -28,18 +28,18 @@ public class TranslationServiceImpl implements TranslationService {
 	@Override
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public Translation save(Translation translation) {
-		var results = termRepository.findByLocaleAndText(translation.getOrigin().getLocale(), translation.getOrigin().getText());
-		if(results.isEmpty()) {			
+		var result = termRepository.getOneByLocaleAndText(translation.getOrigin().getLocale(), translation.getOrigin().getText());
+		if(result == null) {			
 			translation.setOrigin(termRepository.save(translation.getOrigin()));
 		} else {
-			translation.setOrigin(results.get(0));
+			translation.setOrigin(result);
 		}
 		
-		results = termRepository.findByLocaleAndText(translation.getMeaning().getLocale(), translation.getMeaning().getText());
-		if(results.isEmpty()) {			
+		result = termRepository.getOneByLocaleAndText(translation.getMeaning().getLocale(), translation.getMeaning().getText());
+		if(result == null) {			
 			translation.setMeaning(termRepository.save(translation.getMeaning()));
 		} else {
-			translation.setMeaning(results.get(0));
+			translation.setMeaning(result);
 		}
 		if(!translationRepository.existsById(translation.getId())
 			&& !translationRepository.existsById(translation.getId().getReverseTranslationId())) {

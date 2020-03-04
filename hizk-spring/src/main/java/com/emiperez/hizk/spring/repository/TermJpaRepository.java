@@ -18,6 +18,11 @@ public interface TermJpaRepository extends JpaRepository<Term, Integer> {
 	@Query("SELECT DISTINCT t.locale FROM Term t")
 	List<Locale> findDistinctLocales();
 
-	@Query(value = "SELECT * FROM Term t WHERE locale = :locale ORDER BY CEILING(RAND() * 100) LIMIT :numberOfQuestions", nativeQuery=true)
+	@Query(value = "SELECT * FROM Term t "
+				+ "	WHERE locale = :locale "
+				+ " ORDER BY CEILING(RAND() * 20) "
+				+ "				+ (SELECT count(*) FROM learnt_term WHERE term_id = t.id AND is_correct) "
+				+ "				- (SELECT count(*) FROM learnt_term WHERE term_id = t.id AND NOT is_correct) "
+				+ " LIMIT :numberOfQuestions", nativeQuery=true)
 	List<Term> createQuestions(@Param("locale") Locale locale, @Param("numberOfQuestions") int numberOfQuestions);
 }

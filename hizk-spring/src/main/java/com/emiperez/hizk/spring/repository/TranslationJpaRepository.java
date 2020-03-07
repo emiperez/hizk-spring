@@ -16,15 +16,11 @@ public interface TranslationJpaRepository extends JpaRepository<Translation, Tra
 	
 	List<Translation> findByOrderByOriginIdDesc(Pageable page);
 	
-	@Query(value = "SELECT m.id FROM translation t INNER JOIN term m ON (t.origin_id = :originId AND m.id = t.meaning_id)"
+	@Query(value = "SELECT m.text FROM translation t INNER JOIN term m ON (t.origin_id = :originId AND m.id = t.meaning_id)"
 																	+ " OR (t.meaning_id = :originId AND m.id = t.origin_id)"
-					+ " WHERE m.locale = (SELECT answer_locale FROM exam WHERE id = :examId) "
-					+ "	 AND CASEWHEN(SELECT case_sensitive FROM exam WHERE id = :examId, "
-															+ "	m.text = :meaningText, "
-															+ " lower(m.text) = lower(:meaningText))", nativeQuery = true)
-	Integer getOneMeaningIdByOriginIdMeaningLocaleAndMeaningText(
+					+ " WHERE m.locale = (SELECT answer_locale FROM exam WHERE id = :examId)", nativeQuery = true)
+	List<String> findAnswersByExamAndQuestion(
 			@Param("examId") Integer examId, //to get if it's case sensitive
-			@Param("originId") Integer originId, 
-			@Param("meaningText") String meaningText);
+			@Param("originId") Integer originId);
 
 }

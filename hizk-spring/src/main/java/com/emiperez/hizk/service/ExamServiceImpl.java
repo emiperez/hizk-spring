@@ -1,6 +1,7 @@
 package com.emiperez.hizk.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,34 +39,20 @@ public class ExamServiceImpl implements ExamService {
 	
 	@Override
 	@Transactional
-	public boolean checkAnswer(Integer examId, Integer questionId, String answerText) {
-		Integer meaningId = translationRepository.getOneMeaningIdByOriginIdMeaningLocaleAndMeaningText(examId, questionId, answerText);
+	public List<String> findAnswers(Integer examId, Integer questionId) {
+		List<String> answers = translationRepository.findAnswersByExamAndQuestion(examId, questionId);
 		LearntTerm learntQuestion = new LearntTerm();
 		Exam exam = examRepository.getOne(examId);
 		learntQuestion.setExam(exam);
 		learntQuestion.setTerm(termRepository.getOne(questionId));
-		if(meaningId != null) {
-			learntQuestion.setCorrect(true);
-			LearntTerm learntAnswer = new LearntTerm();
-			learntAnswer.setExam(exam);
-			learntAnswer.setTerm(termRepository.getOne(meaningId));
-			learntAnswer.setCorrect(true);
-			learntTermRepository.save(learntAnswer);
-			return true;
+		if(!answers.isEmpty()) {
+			learntQuestion.setCorrect(true);		
 		}
 		else {
 			learntQuestion.setCorrect(false);
-			Term answeredTerm = termRepository.getOneByLocaleAndText(exam.getAnswerLocale(), answerText);
-			if(answeredTerm != null) {
-				LearntTerm learntAnswer = new LearntTerm();
-				learntAnswer.setExam(exam);
-				learntAnswer.setTerm(answeredTerm);
-				learntAnswer.setCorrect(false);
-				learntTermRepository.save(learntAnswer);
-			}
 		}
 		learntTermRepository.save(learntQuestion);
-		return false;
+		return answers;
 	}
 
 }

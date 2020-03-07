@@ -1,5 +1,7 @@
 package com.emiperez.hizk.spring.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.HandlerMapping;
 
 import com.emiperez.hizk.model.Exam;
-import com.emiperez.hizk.model.Term;
 import com.emiperez.hizk.service.ExamService;
 
 @RestController
@@ -30,14 +30,14 @@ public class ExamController {
 		return output;
 	}
 	
-	@GetMapping("/{examId}/{questionId}/**")
-	ResponseEntity<Term> checkAnswer(@PathVariable Integer examId, @PathVariable Integer questionId, HttpServletRequest request) {
-		String answerText = (String)request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-		answerText = answerText.replace("/exams/" + examId + "/" + questionId + "/", "");
-		if (examService.checkAnswer(examId, questionId, answerText)) {
-			return new ResponseEntity<Term>(HttpStatus.NO_CONTENT);
+	@GetMapping("/{examId}/{questionId}")
+	ResponseEntity<List<String>> checkAnswer(@PathVariable Integer examId, @PathVariable Integer questionId, HttpServletRequest request) {
+		
+		List<String> correctAnswers = examService.findAnswers(examId, questionId);
+		if (!correctAnswers.isEmpty()) {
+			return new ResponseEntity<List<String>>(correctAnswers, HttpStatus.OK);
 		}
-		return new ResponseEntity<Term>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<List<String>>(HttpStatus.NOT_FOUND);
 	}
 }
 

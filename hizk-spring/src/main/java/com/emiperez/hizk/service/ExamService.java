@@ -1,5 +1,7 @@
 package com.emiperez.hizk.service;
 
+import java.util.List;
+
 import com.emiperez.hizk.model.Exam;
 
 public interface ExamService {
@@ -8,11 +10,9 @@ public interface ExamService {
 	
 	/**
 	 * @param exam to know whether the answer is case sensitive or not.
-	 * @param answer Term object with the id of the question and the locale
-	 * and text of the answer.
-	 * @return true if exists a translation with that text for that id
-	 * otherwise, false.
+	 * @param termId of the question.
+	 * @return list of correct answers.
 	 */
-	boolean checkAnswer(Integer examId, Integer questionId, String answerText);
+	List<String> findAnswers(Integer examId, Integer questionId);
 	
 }

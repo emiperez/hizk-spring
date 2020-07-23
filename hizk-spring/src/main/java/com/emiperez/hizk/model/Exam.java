@@ -8,6 +8,8 @@ import java.util.Locale;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -28,6 +30,11 @@ public class Exam implements Serializable {
 	@Column(nullable = false)
 	private LocalDateTime when = LocalDateTime.now();
 
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 2, columnDefinition = "CHAR(2) DEFAULT 'B1'")
+	@NonNull
+	private Level level = Level.C2;
+
 	@Column(nullable = false, length = 5)
 	@NonNull
 	private Locale questionLocale;
@@ -37,14 +44,17 @@ public class Exam implements Serializable {
 	private Locale answerLocale;
 
 	@Column
+	private Integer latest;
+
+	@Column
 	private boolean caseSensitive = true;
 
 	@Column
 	private int numberOfQuestions = 10;
 
 	@ManyToMany
-	@JoinTable(name = "exam_questions",	inverseJoinColumns = @JoinColumn(name = "term_id"))
-	@JoinColumn(name = "exam_id")	
+	@JoinTable(name = "exam_questions", inverseJoinColumns = @JoinColumn(name = "term_id"))
+	@JoinColumn(name = "exam_id")
 	private List<Term> questions = new ArrayList<>();
 
 	public Exam() {
@@ -66,6 +76,14 @@ public class Exam implements Serializable {
 		this.when = when;
 	}
 
+	public Level getLevel() {
+		return level;
+	}
+
+	public void setLevel(Level level) {
+		this.level = level;
+	}
+
 	public Locale getQuestionLocale() {
 		return questionLocale;
 	}
@@ -80,6 +98,14 @@ public class Exam implements Serializable {
 
 	public void setAnswerLocale(Locale answerLocale) {
 		this.answerLocale = answerLocale;
+	}
+
+	public Integer getLatest() {
+		return latest;
+	}
+
+	public void setLatest(Integer latest) {
+		this.latest = latest;
 	}
 
 	public boolean isCaseSensitive() {
@@ -104,9 +130,9 @@ public class Exam implements Serializable {
 
 	public void setQuestions(List<Term> questions) {
 		this.questions.clear();
-	    if (questions != null) {
-	        this.questions.addAll(questions);
-	    }
+		if (questions != null) {
+			this.questions.addAll(questions);
+		}
 	}
 
 	public static long getSerialversionuid() {
@@ -167,6 +193,5 @@ public class Exam implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
+
 }

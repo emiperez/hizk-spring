@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emiperez.hizk.model.Exam;
 import com.emiperez.hizk.model.LearntTerm;
-import com.emiperez.hizk.model.Term;
 import com.emiperez.hizk.spring.repository.ExamJpaRepository;
 import com.emiperez.hizk.spring.repository.LearntTermJpaRepository;
 import com.emiperez.hizk.spring.repository.TermJpaRepository;
@@ -32,7 +31,7 @@ public class ExamServiceImpl implements ExamService {
 	@Transactional
 	public Exam startExam(Exam exam) {
 		exam.setWhen(LocalDateTime.now());
-		exam.setQuestions(termRepository.createQuestions(exam.getQuestionLocale(), exam.getNumberOfQuestions()));
+		exam.setQuestions(termRepository.createQuestions(exam));
 		exam = examRepository.save(exam);
 		return exam;
 	}

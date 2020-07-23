@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.emiperez.hizk.model.Term;
 import com.emiperez.hizk.model.Translation;
 import com.emiperez.hizk.model.TranslationId;
 import com.emiperez.hizk.spring.repository.TermJpaRepository;
@@ -51,8 +52,22 @@ public class TranslationServiceImpl implements TranslationService {
 	@Override
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public int delete(TranslationId translationId) {
-		translationRepository.deleteById(translationId);
+		translationRepository.findById(translationId).ifPresent(tr -> {
+			translationRepository.deleteById(tr.getId());
+			deleteTermIfNoTransactions(tr.getOrigin());
+			deleteTermIfNoTransactions(tr.getMeaning());
+			
+		});
 		return 1;
+	}
+	
+	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
+	private int deleteTermIfNoTransactions(Term term) {
+		if(!termRepository.hasTranslations(term.getId())) {
+			termRepository.deleteById(term.getId());
+			return 1;
+		}
+		return 0;
 	}
 
 }

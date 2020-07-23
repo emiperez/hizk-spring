@@ -25,4 +25,7 @@ public interface TermJpaRepository extends JpaRepository<Term, Integer> {
 				+ "				- ( 3 * (SELECT count(*) FROM learnt_term WHERE term_id = t.id AND NOT is_correct)) "
 				+ " LIMIT :numberOfQuestions", nativeQuery=true)
 	List<Term> createQuestions(@Param("locale") Locale locale, @Param("numberOfQuestions") int numberOfQuestions);
+	
+	@Query(value = "SELECT count(*) > 0 FROM translation tr WHERE tr.origin_id = :termId OR tr.meaning_id = :termId", nativeQuery=true)
+	Boolean hasTranslations(@Param("termId") int termId);
 }

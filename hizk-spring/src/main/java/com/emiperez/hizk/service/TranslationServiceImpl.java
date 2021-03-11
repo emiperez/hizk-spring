@@ -1,12 +1,14 @@
 package com.emiperez.hizk.service;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.emiperez.hizk.model.Level;
 import com.emiperez.hizk.model.Term;
 import com.emiperez.hizk.model.Translation;
 import com.emiperez.hizk.model.TranslationId;
@@ -20,6 +22,11 @@ public class TranslationServiceImpl implements TranslationService {
 	
 	@Autowired
 	private TranslationJpaRepository translationRepository;
+	
+	@Override
+	public long countByLocalesAndLevel(Locale originLocale, Locale meaningLocale, Level level) {
+		return translationRepository.countByLocalesAndLevel(originLocale, meaningLocale, level);
+	}
 
 	@Override
 	public List<Translation> listLatest() {

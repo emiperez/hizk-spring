@@ -1,6 +1,7 @@
 package com.emiperez.hizk.spring.controller;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,11 @@ public class TranslationController {
 	@GetMapping("/levels")
 	public List<Level> listAllLevels() {
 		return levels;
+	}
+	
+	@GetMapping("/count/{originLocale}/{meaningLocale}/{level}")
+	public long count(@PathVariable Locale originLocale, @PathVariable Locale meaningLocale, @PathVariable Level level) {
+		return translationService.countByLocalesAndLevel(originLocale, meaningLocale, level);
 	}
 		
 	@PostMapping

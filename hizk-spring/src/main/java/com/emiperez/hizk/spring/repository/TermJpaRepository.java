@@ -29,7 +29,7 @@ public interface TermJpaRepository extends JpaRepository<Term, Integer> {
 				+ " ORDER BY CEILING(RAND() * 20) "
 				+ "				+ (SELECT count(*) FROM learnt_term WHERE term_id = t.id AND is_correct) "
 				+ "				- ( 3 * (SELECT count(*) FROM learnt_term WHERE term_id = t.id AND NOT is_correct)) "
-				+ " LIMIT :#{#exam.numberOfQuestions}", nativeQuery=true)
+				+ " LIMIT :#{#exam.questionAmount}", nativeQuery=true)
 	List<Term> createQuestions(@Param("exam") Exam exam);
 	
 	@Query(value = "SELECT count(*) > 0 FROM translation tr WHERE tr.origin_id = :termId OR tr.meaning_id = :termId", nativeQuery=true)

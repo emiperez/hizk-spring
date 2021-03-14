@@ -50,7 +50,7 @@ public class Exam implements Serializable {
 	private boolean caseSensitive = true;
 
 	@Column
-	private int numberOfQuestions = 10;
+	private int questionAmount = 10;
 
 	@ManyToMany
 	@JoinTable(name = "exam_questions", inverseJoinColumns = @JoinColumn(name = "term_id"))
@@ -116,12 +116,12 @@ public class Exam implements Serializable {
 		this.caseSensitive = caseSensitive;
 	}
 
-	public int getNumberOfQuestions() {
-		return numberOfQuestions;
+	public int getQuestionAmount() {
+		return questionAmount;
 	}
 
-	public void setNumberOfQuestions(int numberOfQuestions) {
-		this.numberOfQuestions = numberOfQuestions;
+	public void setQuestionAmount(int questionAmount) {
+		this.questionAmount = questionAmount;
 	}
 
 	public List<Term> getQuestions() {
@@ -146,7 +146,7 @@ public class Exam implements Serializable {
 		result = prime * result + ((answerLocale == null) ? 0 : answerLocale.hashCode());
 		result = prime * result + (caseSensitive ? 1231 : 1237);
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + numberOfQuestions;
+		result = prime * result + questionAmount;
 		result = prime * result + ((questionLocale == null) ? 0 : questionLocale.hashCode());
 		result = prime * result + ((questions == null) ? 0 : questions.hashCode());
 		result = prime * result + ((when == null) ? 0 : when.hashCode());
@@ -174,7 +174,7 @@ public class Exam implements Serializable {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (numberOfQuestions != other.numberOfQuestions)
+		if (questionAmount != other.questionAmount)
 			return false;
 		if (questionLocale == null) {
 			if (other.questionLocale != null)

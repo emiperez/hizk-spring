@@ -35,7 +35,7 @@ public class ExamServiceImpl implements ExamService {
 		exam = examRepository.save(exam);
 		return exam;
 	}
-	
+
 	@Override
 	@Transactional
 	public List<String> findAnswers(Integer examId, Integer questionId) {

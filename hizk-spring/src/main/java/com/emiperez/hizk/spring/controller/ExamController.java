@@ -31,7 +31,7 @@ public class ExamController {
 	}
 	
 	@GetMapping("/{examId}/{questionId}")
-	ResponseEntity<List<String>> checkAnswer(@PathVariable Integer examId, @PathVariable Integer questionId, HttpServletRequest request) {
+	ResponseEntity<List<String>> findAnswers(@PathVariable Integer examId, @PathVariable Integer questionId, HttpServletRequest request) {
 		
 		List<String> correctAnswers = examService.findAnswers(examId, questionId);
 		if (!correctAnswers.isEmpty()) {

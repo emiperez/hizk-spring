@@ -1,13 +1,16 @@
 package com.emiperez.hizk.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emiperez.hizk.model.Exam;
 import com.emiperez.hizk.model.LearntTerm;
+import com.emiperez.hizk.model.Term;
 import com.emiperez.hizk.spring.repository.ExamJpaRepository;
 import com.emiperez.hizk.spring.repository.LearntTermJpaRepository;
 import com.emiperez.hizk.spring.repository.TermJpaRepository;
@@ -35,11 +38,43 @@ public class ExamServiceImpl implements ExamService {
 		exam = examRepository.save(exam);
 		return exam;
 	}
+	
+	@Override
+	@Transactional
+	/**
+	 * returns the list of terms that are the correct answer for the exam questions
+	 */
+	public List<Term> checkAnswers(Integer examId, List<Term> userAnswers) {
+		Exam exam = examRepository.getOne(examId);
+		List<Term> checkedAnswers = new ArrayList<>();
+		
+		for (Term userAnswer : userAnswers) {
+			LearntTerm learntQuestion = new LearntTerm();
+			learntQuestion.setExam(exam);
+			learntQuestion.setTerm(termRepository.getOne(examId));
+			List<Term> correctAnswers = translationRepository.findCorrectAnswersByExamAndQuestion(examId, userAnswer.getId());
+			String userAnswerText = exam.isCaseSensitive() ? userAnswer.getText() : userAnswer.getText().toUpperCase();
+			if (uppercaseTermListIfNotCaseSensitive(correctAnswers,	exam.isCaseSensitive())
+					.stream().anyMatch(
+							t -> t.getText().equals(userAnswerText))) {				
+				checkedAnswers.add(userAnswer);
+				learntQuestion.setCorrect(true);
+			} else {
+				checkedAnswers.add(correctAnswers.get(0));
+				learntQuestion.setCorrect(false);
+			}
+			learntTermRepository.save(learntQuestion);
+		}
+		return checkedAnswers;
+	}
 
 	@Override
 	@Transactional
-	public List<String> findAnswers(Integer examId, Integer questionId) {
-		List<String> answers = translationRepository.findAnswersByExamAndQuestion(examId, questionId);
+	/**
+	 * returns a list of texts that are correct answers for the given question
+	 */
+	public List<String> findQuestionCorrectAnswers(Integer examId, Integer questionId) {
+		List<Term> answers = translationRepository.findCorrectAnswersByExamAndQuestion(examId, questionId);
 		LearntTerm learntQuestion = new LearntTerm();
 		Exam exam = examRepository.getOne(examId);
 		learntQuestion.setExam(exam);
@@ -51,7 +86,16 @@ public class ExamServiceImpl implements ExamService {
 			learntQuestion.setCorrect(false);
 		}
 		learntTermRepository.save(learntQuestion);
-		return answers;
+		return answers.stream().map(a -> a.getText()).collect(Collectors.toList());
+	}
+	
+	private List<Term> uppercaseTermListIfNotCaseSensitive(List<Term> list, boolean isCaseSensitive) {
+		return isCaseSensitive ?
+				list : 
+				list.stream().map(t -> {
+					t.setText(t.getText().toUpperCase());
+					return t;
+				}).collect(Collectors.toList());
 	}
 
 }

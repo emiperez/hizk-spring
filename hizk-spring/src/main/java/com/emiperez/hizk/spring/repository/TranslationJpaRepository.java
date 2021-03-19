@@ -10,25 +10,25 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.emiperez.hizk.model.Level;
+import com.emiperez.hizk.model.Term;
 import com.emiperez.hizk.model.Translation;
 import com.emiperez.hizk.model.TranslationId;
 
 @Repository
 public interface TranslationJpaRepository extends JpaRepository<Translation, TranslationId> {
 	
-	@Query(value = "SELECT count(*) FROM Translation t "
+	@Query("SELECT count(*) FROM Translation t "
 			+ " WHERE ((t.origin.locale = :originLocale AND t.meaning.locale = :meaningLocale) "
 			+ " 		OR (t.origin.locale = :meaningLocale AND t.meaning.locale = :originLocale)) "
 			+ " AND t.level <= :level ")
 	long countByLocalesAndLevel(Locale originLocale, Locale meaningLocale, Level level);
 	
-	List<Translation> findByOrderByOriginIdDesc(Pageable page);
+	List<Translation> findByOrderByOriginIdDesc(Pageable page);	
 	
-	@Query(value = "SELECT m.text FROM translation t INNER JOIN term m ON (t.origin_id = :originId AND m.id = t.meaning_id)"
-																	+ " OR (t.meaning_id = :originId AND m.id = t.origin_id)"
-					+ " WHERE m.locale = (SELECT answer_locale FROM exam WHERE id = :examId)", nativeQuery = true)
-	List<String> findAnswersByExamAndQuestion(
-			@Param("examId") Integer examId, //to get if it's case sensitive
-			@Param("originId") Integer originId);
+	@Query("SELECT m FROM Translation t INNER JOIN Term m ON (t.originId = :originId AND m.id = t.meaningId) "
+																	+ " OR (t.meaningId = :originId AND m.id = t.originId)"
+					+ " WHERE m.locale = (SELECT e.answerLocale FROM Exam e WHERE e.id = :examId)")
+	List<Term> findCorrectAnswersByExamAndQuestion(@Param("examId") Integer examId, @Param("originId") Integer originId);
+
 
 }

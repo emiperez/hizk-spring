@@ -10,11 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.emiperez.hizk.model.Exam;
+import com.emiperez.hizk.model.Term;
 import com.emiperez.hizk.service.ExamService;
 
 @RestController
@@ -30,10 +32,15 @@ public class ExamController {
 		return output;
 	}
 	
+	@PutMapping("/answers/{examId}")
+	List<Term> checkAnswers(@PathVariable Integer examId, @RequestBody List<Term> answers) {
+		return examService.checkAnswers(examId, answers);
+	}
+	
 	@GetMapping("/{examId}/{questionId}")
-	ResponseEntity<List<String>> findAnswers(@PathVariable Integer examId, @PathVariable Integer questionId, HttpServletRequest request) {
+	ResponseEntity<List<String>> findQuestionAnswers(@PathVariable Integer examId, @PathVariable Integer questionId, HttpServletRequest request) {
 		
-		List<String> correctAnswers = examService.findAnswers(examId, questionId);
+		List<String> correctAnswers = examService.findQuestionCorrectAnswers(examId, questionId);
 		if (!correctAnswers.isEmpty()) {
 			return new ResponseEntity<List<String>>(correctAnswers, HttpStatus.OK);
 		}

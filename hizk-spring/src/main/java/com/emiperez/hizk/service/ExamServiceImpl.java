@@ -51,12 +51,11 @@ public class ExamServiceImpl implements ExamService {
 		for (Term userAnswer : userAnswers) {
 			LearntTerm learntQuestion = new LearntTerm();
 			learntQuestion.setExam(exam);
-			learntQuestion.setTerm(termRepository.getOne(examId));
+			learntQuestion.setTerm(termRepository.getOne(userAnswer.getId()));
 			List<Term> correctAnswers = translationRepository.findCorrectAnswersByExamAndQuestion(examId, userAnswer.getId());
 			String userAnswerText = exam.isCaseSensitive() ? userAnswer.getText() : userAnswer.getText().toUpperCase();
 			if (uppercaseTermListIfNotCaseSensitive(correctAnswers,	exam.isCaseSensitive())
-					.stream().anyMatch(
-							t -> t.getText().equals(userAnswerText))) {				
+					.stream().anyMatch(t -> t.getText().equals(userAnswerText))) {				
 				checkedAnswers.add(userAnswer);
 				learntQuestion.setCorrect(true);
 			} else {
@@ -71,7 +70,7 @@ public class ExamServiceImpl implements ExamService {
 	@Override
 	@Transactional
 	/**
-	 * returns a list of texts that are correct answers for the given question
+	 * returns a list of text that are correct answers for the given question
 	 */
 	public List<String> findQuestionCorrectAnswers(Integer examId, Integer questionId) {
 		List<Term> answers = translationRepository.findCorrectAnswersByExamAndQuestion(examId, questionId);

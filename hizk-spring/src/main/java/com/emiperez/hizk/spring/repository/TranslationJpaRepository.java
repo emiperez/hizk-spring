@@ -25,8 +25,8 @@ public interface TranslationJpaRepository extends JpaRepository<Translation, Tra
 	
 	List<Translation> findByOrderByOriginIdDesc(Pageable page);	
 	
-	@Query("SELECT m FROM Translation t INNER JOIN Term m ON (t.originId = :originId AND m.id = t.meaningId) "
-																	+ " OR (t.meaningId = :originId AND m.id = t.originId)"
+	@Query("SELECT m FROM Translation t INNER JOIN Term m ON (t.origin.id = :originId AND m.id = t.meaning.id) "
+																	+ " OR (t.meaning.id = :originId AND m.id = t.origin.id)"
 					+ " WHERE m.locale = (SELECT e.answerLocale FROM Exam e WHERE e.id = :examId)")
 	List<Term> findCorrectAnswersByExamAndQuestion(@Param("examId") Integer examId, @Param("originId") Integer originId);
 

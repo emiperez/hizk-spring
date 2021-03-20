@@ -59,7 +59,10 @@ public class ExamServiceImpl implements ExamService {
 				checkedAnswers.add(userAnswer);
 				learntQuestion.setCorrect(true);
 			} else {
-				checkedAnswers.add(correctAnswers.get(0));
+				Term correctAnswer = correctAnswers.get(0);
+				Term checkedAnswer = new Term(correctAnswer.getLocale(), correctAnswer.getText());
+				checkedAnswer.setId(userAnswer.getId());
+				checkedAnswers.add(checkedAnswer);
 				learntQuestion.setCorrect(false);
 			}
 			learntTermRepository.save(learntQuestion);

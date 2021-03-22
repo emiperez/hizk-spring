@@ -49,7 +49,7 @@ public class ExamServiceImpl implements ExamService {
 		List<Term> checkedAnswers = new ArrayList<>();
 		List<LearntTerm> learntQuestions = new ArrayList<>();
 		
-		userAnswers.parallelStream().forEach(userAnswer -> {
+		userAnswers.stream().forEach(userAnswer -> {
 			LearntTerm learntQuestion = new LearntTerm();
 			learntQuestion.setExam(exam);
 			learntQuestion.setTerm(termRepository.getOne(userAnswer.getId()));

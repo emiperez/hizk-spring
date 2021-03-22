@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emiperez.hizk.model.Exam;
 import com.emiperez.hizk.model.LearntTerm;
 import com.emiperez.hizk.model.Term;
 import com.emiperez.hizk.spring.repository.ExamJpaRepository;
-import com.emiperez.hizk.spring.repository.LearntTermJpaRepository;
 import com.emiperez.hizk.spring.repository.TermJpaRepository;
 import com.emiperez.hizk.spring.repository.TranslationJpaRepository;
 
@@ -28,7 +28,7 @@ public class ExamServiceImpl implements ExamService {
 	private ExamJpaRepository examRepository;
 	
 	@Autowired
-	private LearntTermJpaRepository learntTermRepository;
+	private LearntTermService learntTermService;
 
 	@Override
 	@Transactional
@@ -40,15 +40,16 @@ public class ExamServiceImpl implements ExamService {
 	}
 	
 	@Override
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	/**
 	 * returns the list of terms that are the correct answer for the exam questions
 	 */
 	public List<Term> checkAnswers(Integer examId, List<Term> userAnswers) {
 		Exam exam = examRepository.getOne(examId);
 		List<Term> checkedAnswers = new ArrayList<>();
+		List<LearntTerm> learntQuestions = new ArrayList<>();
 		
-		for (Term userAnswer : userAnswers) {
+		userAnswers.parallelStream().forEach(userAnswer -> {
 			LearntTerm learntQuestion = new LearntTerm();
 			learntQuestion.setExam(exam);
 			learntQuestion.setTerm(termRepository.getOne(userAnswer.getId()));
@@ -65,8 +66,9 @@ public class ExamServiceImpl implements ExamService {
 				checkedAnswers.add(checkedAnswer);
 				learntQuestion.setCorrect(false);
 			}
-			learntTermRepository.save(learntQuestion);
-		}
+			learntQuestions.add(learntQuestion);
+		});
+		learntTermService.saveLearntTerms(learntQuestions);
 		return checkedAnswers;
 	}
 
@@ -87,8 +89,8 @@ public class ExamServiceImpl implements ExamService {
 		else {
 			learntQuestion.setCorrect(false);
 		}
-		learntTermRepository.save(learntQuestion);
-		return answers.stream().map(a -> a.getText()).collect(Collectors.toList());
+		learntTermService.save(learntQuestion);
+		return answers.parallelStream().map(a -> a.getText()).collect(Collectors.toList());
 	}
 	
 	private List<Term> uppercaseTermListIfNotCaseSensitive(List<Term> list, boolean isCaseSensitive) {

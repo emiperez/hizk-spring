@@ -19,8 +19,11 @@ import com.emiperez.hizk.model.Exam;
 import com.emiperez.hizk.model.Term;
 import com.emiperez.hizk.service.ExamService;
 
+import lombok.extern.log4j.Log4j2;
+
 @RestController
 @RequestMapping("exams")
+@Log4j2
 public class ExamController {
 	
 	@Autowired
@@ -34,7 +37,10 @@ public class ExamController {
 	
 	@PutMapping("/answers/{examId}")
 	List<Term> checkAnswers(@PathVariable Integer examId, @RequestBody List<Term> answers) {
-		return examService.checkAnswers(examId, answers);
+		List<Term> result = examService.checkAnswers(examId, answers);
+		log.info("=================================================RESULTS calculated================================================");
+		return result;
+		
 	}
 	
 	@GetMapping("/{examId}/{questionId}")

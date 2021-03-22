@@ -5,8 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import com.emiperez.hizk.service.AsyncLearntTermService;
 import com.emiperez.hizk.service.ExamService;
 import com.emiperez.hizk.service.ExamServiceImpl;
+import com.emiperez.hizk.service.LearntTermService;
 import com.emiperez.hizk.service.TranslationService;
 import com.emiperez.hizk.service.TranslationServiceImpl;
 
@@ -23,5 +25,10 @@ public class BeanConfiguration {
 	@Bean
 	public ExamService examService() {
 		return new ExamServiceImpl();
+	}
+	
+	@Bean 
+	public LearntTermService learntTermService() {
+		return new AsyncLearntTermService();
 	}
 }

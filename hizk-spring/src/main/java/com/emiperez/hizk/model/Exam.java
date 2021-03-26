@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -52,8 +54,10 @@ public class Exam implements Serializable {
 	@Column
 	private int questionAmount = 10;
 
-	@ManyToMany
-	@JoinTable(name = "exam_questions", inverseJoinColumns = @JoinColumn(name = "term_id"))
+	@ManyToMany(cascade = CascadeType.REMOVE)
+	@JoinTable(name = "exam_questions", 
+				inverseJoinColumns = @JoinColumn(name = "term_id", 
+												foreignKey = @ForeignKey(foreignKeyDefinition = "foreign key (term_id) references term(id) on delete cascade")))
 	@JoinColumn(name = "exam_id")
 	private List<Term> questions = new ArrayList<>();
 

@@ -2,11 +2,15 @@ package com.emiperez.hizk.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  * After an answer to an Exam question, 2 LearnTerm instances are created.
@@ -22,12 +26,13 @@ public class LearntTerm implements Serializable {
 	@EmbeddedId
 	ExamTermId id;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.REMOVE)
 	@MapsId("examId")
 	Exam exam;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.REMOVE)
 	@MapsId("termId")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	Term term;
 	
 	@Column

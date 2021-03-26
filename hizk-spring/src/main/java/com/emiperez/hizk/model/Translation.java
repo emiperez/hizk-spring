@@ -8,7 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -21,12 +24,14 @@ public class Translation implements Serializable{
 	@JsonIgnore
 	private TranslationId id;
 
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "origin_id", insertable = false, updatable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Term origin;
 
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "meaning_id", insertable = false, updatable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Term meaning;
 	
 	@Enumerated(EnumType.STRING)

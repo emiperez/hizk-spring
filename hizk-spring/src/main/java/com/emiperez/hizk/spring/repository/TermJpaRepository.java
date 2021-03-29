@@ -18,6 +18,12 @@ public interface TermJpaRepository extends JpaRepository<Term, Integer> {
 	
 	@Query("SELECT DISTINCT t.locale FROM Term t")
 	List<Locale> findDistinctLocales();
+	
+	@Query("SELECT t FROM Term t WHERE t.text LIKE %:text%" )
+	List<Term> searchByText(@Param("text") String text);
+	
+	@Query("SELECT t FROM Term t WHERE t.text LIKE %:text% AND t.locale = :locale" )
+	List<Term> searchByTextAndLocale(@Param("text") String text, @Param("locale") String locale);
 
 	@Query(value = "SELECT * FROM "
 				+ "		(SELECT * FROM term, translation tr "

@@ -3,8 +3,8 @@ package com.emiperez.hizk.spring.repository;
 import java.util.List;
 import java.util.Locale;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +12,7 @@ import com.emiperez.hizk.model.Exam;
 import com.emiperez.hizk.model.Term;
 
 @Repository
-public interface TermJpaRepository extends JpaRepository<Term, Integer> {
+public interface TermRepository extends CrudRepository<Term, Integer> {
 	
 	Term getOneByLocaleAndText(Locale locale, String text);
 	
@@ -40,4 +40,9 @@ public interface TermJpaRepository extends JpaRepository<Term, Integer> {
 	
 	@Query(value = "SELECT count(*) > 0 FROM translation tr WHERE tr.origin_id = :termId OR tr.meaning_id = :termId", nativeQuery=true)
 	Boolean hasTranslations(@Param("termId") int termId);
+
+	@Query("SELECT m FROM Translation t INNER JOIN Term m ON (t.origin.id = :originId AND m.id = t.meaning.id) "
+																	+ " OR (t.meaning.id = :originId AND m.id = t.origin.id)"
+					+ " WHERE m.locale = (SELECT e.answerLocale FROM Exam e WHERE e.id = :examId)")
+	List<Term> findCorrectAnswersByExamAndQuestion(@Param("examId") Integer examId, @Param("originId") Integer originId);
 }

@@ -7,13 +7,13 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.emiperez.hizk.model.LearntTerm;
-import com.emiperez.hizk.spring.repository.LearntTermJpaRepository;
+import com.emiperez.hizk.spring.repository.LearntTermRepository;
 
 @Service("learntTermService")
 public class AsyncLearntTermService implements LearntTermService {
 
 	@Autowired
-	private LearntTermJpaRepository repository;
+	private LearntTermRepository repository;
 	
 	@Override
 	@Async

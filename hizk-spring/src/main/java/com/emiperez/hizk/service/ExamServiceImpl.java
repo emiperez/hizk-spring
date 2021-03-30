@@ -12,20 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.emiperez.hizk.model.Exam;
 import com.emiperez.hizk.model.LearntTerm;
 import com.emiperez.hizk.model.Term;
-import com.emiperez.hizk.spring.repository.ExamJpaRepository;
-import com.emiperez.hizk.spring.repository.TermJpaRepository;
-import com.emiperez.hizk.spring.repository.TranslationJpaRepository;
+import com.emiperez.hizk.spring.repository.ExamRepository;
+import com.emiperez.hizk.spring.repository.TermRepository;
 
 public class ExamServiceImpl implements ExamService {
 
 	@Autowired
-	private TermJpaRepository termRepository;
-
-	@Autowired
-	private TranslationJpaRepository translationRepository;
+	private TermRepository termRepository;
 	
 	@Autowired
-	private ExamJpaRepository examRepository;
+	private ExamRepository examRepository;
 	
 	@Autowired
 	private LearntTermService learntTermService;
@@ -45,15 +41,15 @@ public class ExamServiceImpl implements ExamService {
 	 * returns the list of terms that are the correct answer for the exam questions
 	 */
 	public List<Term> checkAnswers(Integer examId, List<Term> userAnswers) {
-		Exam exam = examRepository.getOne(examId);
+		Exam exam = examRepository.findById(examId).get();
 		List<Term> checkedAnswers = new ArrayList<>();
 		List<LearntTerm> learntQuestions = new ArrayList<>();
 		
 		userAnswers.stream().forEach(userAnswer -> {
 			LearntTerm learntQuestion = new LearntTerm();
 			learntQuestion.setExam(exam);
-			learntQuestion.setTerm(termRepository.getOne(userAnswer.getId()));
-			List<Term> correctAnswers = translationRepository.findCorrectAnswersByExamAndQuestion(examId, userAnswer.getId());
+			learntQuestion.setTerm(termRepository.findById(userAnswer.getId()).get());
+			List<Term> correctAnswers = termRepository.findCorrectAnswersByExamAndQuestion(examId, userAnswer.getId());
 			String userAnswerText = exam.isCaseSensitive() ? userAnswer.getText() : userAnswer.getText().toUpperCase();
 			if (uppercaseTermListIfNotCaseSensitive(correctAnswers,	exam.isCaseSensitive())
 					.stream().anyMatch(t -> t.getText().equals(userAnswerText))) {				
@@ -78,11 +74,11 @@ public class ExamServiceImpl implements ExamService {
 	 * returns a list of text that are correct answers for the given question
 	 */
 	public List<String> findQuestionCorrectAnswers(Integer examId, Integer questionId) {
-		List<Term> answers = translationRepository.findCorrectAnswersByExamAndQuestion(examId, questionId);
+		List<Term> answers = termRepository.findCorrectAnswersByExamAndQuestion(examId, questionId);
 		LearntTerm learntQuestion = new LearntTerm();
-		Exam exam = examRepository.getOne(examId);
+		Exam exam = examRepository.findById(examId).get();
 		learntQuestion.setExam(exam);
-		learntQuestion.setTerm(termRepository.getOne(questionId));
+		learntQuestion.setTerm(termRepository.findById(questionId).get());
 		if(!answers.isEmpty()) {
 			learntQuestion.setCorrect(true);		
 		}

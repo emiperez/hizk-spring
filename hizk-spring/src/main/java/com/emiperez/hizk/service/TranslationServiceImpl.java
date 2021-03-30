@@ -12,16 +12,16 @@ import com.emiperez.hizk.model.Level;
 import com.emiperez.hizk.model.Term;
 import com.emiperez.hizk.model.Translation;
 import com.emiperez.hizk.model.TranslationId;
-import com.emiperez.hizk.spring.repository.TermJpaRepository;
-import com.emiperez.hizk.spring.repository.TranslationJpaRepository;
+import com.emiperez.hizk.spring.repository.TermRepository;
+import com.emiperez.hizk.spring.repository.TranslationRepository;
 
 public class TranslationServiceImpl implements TranslationService {
 	
 	@Autowired
-	private TermJpaRepository termRepository;
+	private TermRepository termRepository;
 	
 	@Autowired
-	private TranslationJpaRepository translationRepository;
+	private TranslationRepository translationRepository;
 	
 	@Override
 	public long countByLocalesAndLevel(Locale originLocale, Locale meaningLocale, Level level) {

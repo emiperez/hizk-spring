@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.emiperez.hizk.model.Term;
-import com.emiperez.hizk.spring.repository.TermJpaRepository;
+import com.emiperez.hizk.spring.repository.TermRepository;
 
 @RestController
 @RequestMapping("terms")
 public class TermController {
 	
 	@Autowired
-	TermJpaRepository termRepository;
+	TermRepository termRepository;
 	
 	@GetMapping("/locales")
 	public ResponseEntity<List<Locale>> listLocales() {

@@ -24,7 +24,7 @@ public interface TranslationRepository extends CrudRepository<Translation, Trans
 	
 	List<Translation> findByOrderByOriginIdDesc(Pageable page);
 	
-	@Query("SELECT t FROM Translation t WHERE t.origin.id = :termId OR t.target.id = :termId")
+	@Query("SELECT t FROM Translation t WHERE t.origin.id = :termId OR t.meaning.id = :termId")
 	List<Translation> findByTerm(@Param("termId") Integer termId);
 
 

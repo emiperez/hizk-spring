@@ -24,6 +24,15 @@ public class TermController {
 	@Autowired
 	TermRepository termRepository;
 	
+	@GetMapping("/{id}")
+	public ResponseEntity<Term> getTerm(@PathVariable int id) {
+		Optional<Term> term = termRepository.findById(id);
+		if(term.isEmpty()) {
+			return new ResponseEntity<Term>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Term>(term.get(), HttpStatus.OK);
+	}
+	
 	@GetMapping("/locales")
 	public ResponseEntity<List<Locale>> listLocales() {
 		var locales = termRepository.findDistinctLocales();

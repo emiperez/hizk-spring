@@ -32,7 +32,12 @@ public class TranslationServiceImpl implements TranslationService {
 	public List<Translation> listLatest() {
 		return translationRepository.findByOrderByOriginIdDesc(PageRequest.of(0, 5));
 	}
-	
+		
+	@Override
+	public List<Translation> findByTerm(int id) {
+		return translationRepository.findByTerm(id);
+	}
+
 	@Override
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public Translation save(Translation translation) {

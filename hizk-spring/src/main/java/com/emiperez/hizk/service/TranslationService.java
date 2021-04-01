@@ -13,6 +13,8 @@ public interface TranslationService {
 	
 	List<Translation> listLatest();
 	
+	List<Translation> findByTerm(int id);
+	
 	Translation save(Translation translation);
 	
 	int delete(TranslationId translationId);

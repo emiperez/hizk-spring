@@ -43,8 +43,13 @@ public class TermController {
 	}
 	
 	@GetMapping("/search/{text}")
-	public ResponseEntity<List<Term>> searchTerm(@PathVariable String text) {
+	public ResponseEntity<List<Term>> searchTermByText(@PathVariable String text) {
 		return new ResponseEntity<List<Term>>(termRepository.searchByText(text), HttpStatus.OK);
+	}
+	
+	@GetMapping("/search/{text}/{locale}")
+	public ResponseEntity<List<Term>> searchTermByTextAndLocale(@PathVariable String text, @PathVariable Locale locale) {
+		return new ResponseEntity<List<Term>>(termRepository.searchByTextAndLocale(text, locale), HttpStatus.OK);
 	}
 	
 	@PutMapping

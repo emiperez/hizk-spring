@@ -23,7 +23,7 @@ public interface TermRepository extends CrudRepository<Term, Integer> {
 	List<Term> searchByText(@Param("text") String text);
 	
 	@Query("SELECT t FROM Term t WHERE t.text LIKE %:text% AND t.locale = :locale" )
-	List<Term> searchByTextAndLocale(@Param("text") String text, @Param("locale") String locale);
+	List<Term> searchByTextAndLocale(@Param("text") String text, @Param("locale") Locale locale);
 
 	@Query(value = "SELECT * FROM "
 				+ "		(SELECT * FROM term, translation tr "

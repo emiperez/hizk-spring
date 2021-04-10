@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.emiperez.hizk.model.Term;
@@ -42,13 +43,13 @@ public class TermController {
 		return new ResponseEntity<List<Locale>>(locales, HttpStatus.OK);
 	}
 	
-	@GetMapping("/search/{text}")
-	public ResponseEntity<List<Term>> searchTermByText(@PathVariable String text) {
+	@GetMapping("/search/")
+	public ResponseEntity<List<Term>> searchTermByText(@RequestParam String text) {
 		return new ResponseEntity<List<Term>>(termRepository.searchByText(text), HttpStatus.OK);
 	}
 	
-	@GetMapping("/search/{text}/{locale}")
-	public ResponseEntity<List<Term>> searchTermByTextAndLocale(@PathVariable String text, @PathVariable Locale locale) {
+	@GetMapping("/search/{locale}/")
+	public ResponseEntity<List<Term>> searchTermByTextAndLocale(@RequestParam String text, @PathVariable Locale locale) {
 		return new ResponseEntity<List<Term>>(termRepository.searchByTextAndLocale(text, locale), HttpStatus.OK);
 	}
 	

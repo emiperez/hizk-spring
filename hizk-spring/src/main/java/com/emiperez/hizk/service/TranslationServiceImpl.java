@@ -30,7 +30,7 @@ public class TranslationServiceImpl implements TranslationService {
 
 	@Override
 	public List<Translation> listLatest() {
-		return translationRepository.findByOrderByOriginIdDesc(PageRequest.of(0, 5));
+		return translationRepository.findByOrderByOriginIdDesc(PageRequest.of(0, 10));
 	}
 		
 	@Override

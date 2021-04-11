@@ -42,23 +42,20 @@ public class TranslationServiceImpl implements TranslationService {
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public Translation save(Translation translation) {
 		var result = termRepository.getOneByLocaleAndText(translation.getOrigin().getLocale(), translation.getOrigin().getText());
-		if(result == null) {			
+		if (result == null) {			
 			translation.setOrigin(termRepository.save(translation.getOrigin()));
 		} else {
 			translation.setOrigin(result);
 		}
 		
 		result = termRepository.getOneByLocaleAndText(translation.getMeaning().getLocale(), translation.getMeaning().getText());
-		if(result == null) {			
+		if (result == null) {			
 			translation.setMeaning(termRepository.save(translation.getMeaning()));
 		} else {
 			translation.setMeaning(result);
 		}
-		if(!translationRepository.existsById(translation.getId())
-			&& !translationRepository.existsById(translation.getId().getReverseTranslationId())) {
-			return translationRepository.save(translation);
-		}
-		return translation;
+		return translationRepository.save(translation);
+		
 	}	
 
 	@Override
